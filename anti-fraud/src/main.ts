@@ -13,11 +13,11 @@ async function bootstrap() {
           brokers: ['localhost:9092'],
         },
         consumer: {
-          groupId: 'anti-fraud-consumer'
+          groupId: 'antifraud-consumer',
         },
       },
     },
   );
-  app.listen()
+  app.listen();
 }
 bootstrap();

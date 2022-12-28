@@ -11,6 +11,7 @@ import { TransactionPostgresService } from './transaction/adapters/out/transacti
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forFeature([Transaction]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

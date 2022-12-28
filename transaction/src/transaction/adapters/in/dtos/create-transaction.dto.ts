@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateTransaction {
+export class TransactionRequest {
   @ApiProperty()
   accountExternalIdDebit: string;
 
@@ -12,4 +12,21 @@ export class CreateTransaction {
 
   @ApiProperty()
   value: number;
+}
+
+export class CreatedTransaction {
+  @ApiProperty()
+  accountExternalIdDebit: string;
+
+  @ApiProperty()
+  accountExternalIdCredit: string;
+
+  @ApiProperty()
+  tranferTypeId: number;
+
+  @ApiProperty()
+  value: number;
+
+  @ApiProperty()
+  status: string;
 }

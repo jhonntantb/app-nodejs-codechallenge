@@ -1,7 +1,7 @@
-import { CreateTransaction } from '../adapters/in/dtos/create-transaction.dto';
+import { CreatedTransaction } from '../adapters/in/dtos/create-transaction.dto';
 
 export interface ITransactionRequest {
-  saveTransaction(transaction: CreateTransaction): Promise<any>;
-  updateTransaction(): Promise<any>;
-  createOrder(transaction: CreateTransaction): Promise<any>;
+  saveTransaction(transaction: CreatedTransaction): Promise<any>;
+  updateTransaction(id: string, body: any): Promise<any>;
+  createOrder(transaction: CreatedTransaction);
 }

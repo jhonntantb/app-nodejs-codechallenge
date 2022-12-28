@@ -1,14 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTransaction } from '../in/dtos/create-transaction.dto';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { CreatedTransaction } from '../in/dtos/create-transaction.dto';
 import { ITransactionRepository } from './transaction.repository';
+import { Repository } from 'typeorm';
+import { Transaction } from '../../entity/transaction.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TransactionPostgresService implements ITransactionRepository {
-  async saveTransaction(transaction: CreateTransaction): Promise<any> {
-    return transaction;
+  constructor(
+    @InjectRepository(Transaction)
+    private transactionRepository: Repository<Transaction>,
+  ) {}
+  async saveTransaction(transaction: CreatedTransaction): Promise<any> {
+    const newTransaction = this.transactionRepository.create(transaction);
+    await this.transactionRepository.save(newTransaction);
+    return newTransaction;
   }
 
-  async updateTransaction(): Promise<any> {
-    return;
+  async updateTransaction(id: string, body: any): Promise<any> {
+    const transaction = {
+      id,
+      ...body,
+    };
+    const transactionModify = await this.transactionRepository.preload(
+      transaction,
+    );
+    if (transactionModify) {
+      return this.transactionRepository.save(transactionModify);
+    }
+    throw new NotFoundException(
+      `the transaction with the id: ${id} was not found`,
+    );
   }
 }
