@@ -4,8 +4,9 @@ import { ValidateMapper } from './validate-mapper';
 @Injectable()
 export class AppService {
   constructor(private mapper: ValidateMapper) {}
-  validateInformation(data: number): any {
-    const response = this.mapper.validateValue(data);
+  async validateInformation(data: number): Promise<any> {
+    const response = await this.mapper.validateValue(data);
+    console.log('lo qeu vamso enviar de validacion', response);
     return response;
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatedTransaction } from '../in/dtos/create-transaction.dto';
 import { ITransactionRepository } from './transaction.repository';
 import { Repository } from 'typeorm';
@@ -18,6 +18,7 @@ export class TransactionPostgresService implements ITransactionRepository {
   }
 
   async updateTransaction(id: string, body: any): Promise<any> {
+    console.log('me estoy actulizando con: ', id, body);
     const transaction = {
       id,
       ...body,
@@ -31,5 +32,14 @@ export class TransactionPostgresService implements ITransactionRepository {
     throw new NotFoundException(
       `the transaction with the id: ${id} was not found`,
     );
+  }
+
+  async getTransaction(id: string): Promise<any> {
+    const transaction = await this.transactionRepository.find({
+      where: {
+        id: id,
+      },
+    });
+    return transaction;
   }
 }

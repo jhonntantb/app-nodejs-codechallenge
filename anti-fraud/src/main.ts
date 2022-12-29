@@ -13,7 +13,7 @@ async function bootstrap() {
           brokers: ['localhost:9092'],
         },
         consumer: {
-          groupId: 'antifraud-consumer',
+          groupId: 'transaction-consumer',
         },
       },
     },

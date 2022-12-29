@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Transaction } from './transaction/entity/transaction.entity';
 import { TransactionPersistenceService } from './transaction/adapters/out/transaction-persistence.service';
 import { TransactionPostgresService } from './transaction/adapters/out/transaction-postgres.service';
+import { TransactionResponseMapper } from './transaction/adapters/in/mapper-transaction-res';
 
 @Module({
   imports: [
@@ -28,21 +29,25 @@ import { TransactionPostgresService } from './transaction/adapters/out/transacti
     }),
     ClientsModule.register([
       {
-        name: 'ANTIFRAUD_SERVICE',
+        name: 'TRANSACTION_SERVICE',
         transport: Transport.KAFKA,
         options: {
           client: {
-            clientId: 'antifraud',
+            clientId: 'transaction',
             brokers: ['localhost:9092'],
           },
           consumer: {
-            groupId: 'antifraud-consumer',
+            groupId: 'transaction-consumer',
           },
         },
       },
     ]),
   ],
   controllers: [TransactionController],
-  providers: [TransactionPersistenceService, TransactionPostgresService],
+  providers: [
+    TransactionPersistenceService,
+    TransactionPostgresService,
+    TransactionResponseMapper,
+  ],
 })
 export class AppModule {}

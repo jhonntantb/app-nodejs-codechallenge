@@ -1,17 +1,12 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Inject,
-  Post,
-} from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
 import { ITransactionRequest } from 'src/transaction/aplication/transaction.request';
 import { TransactionPersistenceService } from '../out/transaction-persistence.service';
+import { TransactionResponseMapper } from './mapper-transaction-res';
 import {
   TransactionRequest,
   CreatedTransaction,
+  ResponseTransaction,
 } from './dtos/create-transaction.dto';
 
 const entity = 'transaction';
@@ -25,12 +20,13 @@ export class TransactionController {
 
   constructor(
     transactionPersitenceservice: TransactionPersistenceService,
-    @Inject('ANTIFRAUD_SERVICE') private readonly antiFraudService: ClientKafka,
+    private mapperTransaction: TransactionResponseMapper,
   ) {
     this.transactionRequest = transactionPersitenceservice;
   }
 
   @Post()
+  @ApiOkResponse({ type: ResponseTransaction })
   async saveTransaction(
     @Body()
     transaction: TransactionRequest,
@@ -39,9 +35,10 @@ export class TransactionController {
       ...transaction,
       status: 'pending',
     };
-    return this.transactionRequest.saveTransaction(transactionRequest);
-  }
-  onModuleInit() {
-    this.antiFraudService.subscribeToResponseOf('validate_information');
+    const newTransaction = await this.transactionRequest.saveTransaction(
+      transactionRequest,
+    );
+
+    return this.mapperTransaction.orderData(newTransaction);
   }
 }
