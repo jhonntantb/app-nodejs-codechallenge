@@ -18,7 +18,6 @@ export class TransactionPostgresService implements ITransactionRepository {
   }
 
   async updateTransaction(id: string, body: any): Promise<any> {
-    console.log('me estoy actulizando con: ', id, body);
     const transaction = {
       id,
       ...body,

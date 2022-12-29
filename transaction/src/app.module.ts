@@ -12,7 +12,9 @@ import { TransactionResponseMapper } from './transaction/adapters/in/mapper-tran
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    // instanciamos un repository de cada entidad
     TypeOrmModule.forFeature([Transaction]),
+    // Integramos la base de datos con TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -27,6 +29,7 @@ import { TransactionResponseMapper } from './transaction/adapters/in/mapper-tran
       }),
       inject: [ConfigService],
     }),
+    // Registamos en servicio de Kafka
     ClientsModule.register([
       {
         name: 'TRANSACTION_SERVICE',

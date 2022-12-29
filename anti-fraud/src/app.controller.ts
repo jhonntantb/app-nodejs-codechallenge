@@ -8,7 +8,6 @@ export class AppController {
 
   @MessagePattern('validate_information')
   validateInformation(@Payload() message) {
-    console.log('esta es la data que nos llega', message);
     return this.appService.validateInformation(message);
   }
 }

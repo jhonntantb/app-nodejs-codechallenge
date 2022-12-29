@@ -34,7 +34,7 @@ export class TransactionPersistenceService implements ITransactionRequest {
     this.transactionService.subscribeToResponseOf('validate_information');
     await this.transactionService.connect();
   }
-
+  // creamos la orden y esperamos la respuesta del servicio anti-fraude
   async createOrder(id: string, value: number) {
     try {
       const res = await new Promise((resolve) => {
@@ -43,14 +43,12 @@ export class TransactionPersistenceService implements ITransactionRequest {
             value: { id, value },
           })
           .subscribe(async (response) => {
-            console.log('este valorcito', response);
             const updateTransaction = await this.updateTransaction(
               response.id,
               {
                 status: response.status,
               },
             );
-            console.log(updateTransaction.status, 'ya esta actualizado');
             resolve(updateTransaction);
           });
       });

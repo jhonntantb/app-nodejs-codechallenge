@@ -1,13 +1,10 @@
-# Yape Code Challenge :rocket:
+# Microservicios de Transacción y Anti-Fraude
 
-- [Problem](#problem)
-- [Tech Stack](#tech_stack)
-- [Send us your challenge](#send_us_your_challenge)
+## Microservicios conectados por Kafka
 
-# Problem
+# Problema
 
-Every time a financial transaction is created it must be validated by our anti-fraud microservice and then the same service sends a message back to update the transaction status.
-For now, we have only three transaction statuses:
+Cada vez que se crea una transacción financiera, nuestro microservicio antifraude debe validarla y luego el mismo servicio envía un mensaje para actualizar el estado de la transacción.Por ahora, solo tenemos tres estados de transacción:
 
 <ol>
   <li>pending</li>
@@ -15,7 +12,7 @@ For now, we have only three transaction statuses:
   <li>rejected</li>  
 </ol>
 
-Every transaction with a value greater than 1000 should be rejected.
+Toda transacción con un valor superior a 1000 debe ser rechazada.
 
 ```mermaid
   flowchart LR
@@ -26,53 +23,93 @@ Every transaction with a value greater than 1000 should be rejected.
     Transaction -- Update transaction Status event--> transactionDatabase[(Database)]
 ```
 
-# Tech Stack
+## Tecnologias
 
-<ol>
-  <li>Node. You can use any framework you want (i.e. Nestjs with an ORM like TypeOrm or Prisma) </li>
-  <li>Any database</li>
-  <li>Kafka</li>    
-</ol>
+- NodeJS, Nesjs
+- TypeScript,
+- ORM: TypeOrm,
+- PostgreSQL
+- Docker
 
-We do provide a `Dockerfile` to help you get started with a dev environment.
+## Diseño y Arquitectura
 
-You must have two resources:
+- El Proyecto tiene arquitectura hexagonal para mayor control de funcionalidades y escalabilidad, separando la entrada de datos, conexion a la base de datos y Logica de negocio.
 
-1. Resource to create a transaction that must containt:
+## Run Locally
 
-```json
-{
-  "accountExternalIdDebit": "Guid",
-  "accountExternalIdCredit": "Guid",
-  "tranferTypeId": 1,
-  "value": 120
-}
+### 1. Clone repo
+
+```
+$ git https://github.com/jhonntantb/app-nodejs-codechallenge
+$ cd app-nodejs-codechallenge
 ```
 
-2. Resource to retrieve a transaction
+### 2. Ejecutar Docker-Compose
 
-```json
-{
-  "transactionExternalId": "Guid",
-  "transactionType": {
-    "name": ""
-  },
-  "transactionStatus": {
-    "name": ""
-  },
-  "value": 120,
-  "createdAt": "Date"
-}
+- Instalar docker en tu computadora [docker](https://www.docker.com/products/docker-desktop)
+
+```
+$ docker-compose up -d
 ```
 
-## Optional
+## 3. Conectarse a la Base de datos
 
-You can use any approach to store transaction data but you should consider that we may deal with high volume scenarios where we have a huge amount of writes and reads for the same data at the same time. How would you tackle this requirement?
+- En este proyecto use una base de datos alojada en la nube, proporcionada por supabase, el cual es un servicio gratuito. Para lo cual necesitamos un archivo con variables de entorno que detallo en el siguiente apartado.
 
-You can use Graphql;
+### 4. Crear archivo .env
 
-# Send us your challenge
+- Crear archivo .env en la carpeta transaction
+- Debe contener los siguientes datos:
 
-When you finish your challenge, after forking a repository, you can open a pull request to our repository. There are no limitations to the implementation, you can follow the programming paradigm, modularization, and style that you feel is the most appropriate solution.
+```
+DB_HOST=db.bdmntvuhcgabuzknlelp.supabase.co
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=1yB4xoRHgPZhm26X
+DB_NAME=postgres
+```
 
-If you have any questions, please let us know.
+### 5. Run Microservices
+
+#### 5.1 Run Microservice Transaction
+
+```
+$ cd transaction
+
+$ npm install
+
+$ npm run start
+```
+
+- the server continue listening
+
+```
+$ npm run start:dev
+```
+
+#### 5.1 Run Microservice Transaction
+
+```
+$ cd anti-fraud
+
+$ npm install
+
+$ npm run start
+```
+
+- the server continue listening
+
+```
+$ npm run start:dev
+```
+
+### 6. Ver Documentación de la API
+
+- Ejecuta esto en su navegador: http://localhost:8080/docs
+- Click en la ruta
+- Ver Parametros
+- Probar la API
+
+## Support
+
+- Contact Developer: [Jhonntan](mailto:Jhonntan.jhonntantb@gmail.com)

@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class TransactionRequest {
   @ApiProperty()
@@ -74,15 +74,4 @@ export class ResponseTransaction {
 
   @ApiProperty()
   createdAt: Date;
-}
-
-export class saveTransactionResponse extends OmitType(ResponseTransaction, [
-  'transactionType',
-  'transactionStatus',
-] as const) {
-  @ApiProperty({ type: { Name } })
-  transactionType: Name;
-
-  @ApiProperty({ type: { Name } })
-  transactionStatus: Name;
 }

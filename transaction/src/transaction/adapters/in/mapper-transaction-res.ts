@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ResponseTransactionDB } from './dtos/create-transaction.dto';
 
+// mapea los datos que recibimos de la petición y les da una estructura consumible
 @Injectable()
 export class TransactionResponseMapper {
   async orderData(data: ResponseTransactionDB) {

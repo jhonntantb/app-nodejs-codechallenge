@@ -6,7 +6,6 @@ export class AppService {
   constructor(private mapper: ValidateMapper) {}
   async validateInformation(data: number): Promise<any> {
     const response = await this.mapper.validateValue(data);
-    console.log('lo qeu vamso enviar de validacion', response);
     return response;
   }
 }

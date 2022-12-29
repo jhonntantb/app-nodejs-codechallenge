@@ -7,6 +7,9 @@ async function bootstrap() {
     cors: { origin: '*' },
   });
   app.setGlobalPrefix('api');
+  /**
+   Las siguientes lineas nos sirven para la documentación
+   */
   const options = new DocumentBuilder()
     .setTitle('Transaction API')
     .setDescription('Transaction microservice REST API')
